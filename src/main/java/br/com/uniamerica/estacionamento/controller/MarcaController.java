@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.repository.MarcaRep;
 import br.com.uniamerica.estacionamento.service.MarcaService;
@@ -8,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/marca")
@@ -70,11 +73,17 @@ public class MarcaController {
 
     @DeleteMapping("delete/{id}")
     public void deletaMarca(@PathVariable Long id){
-
-        marcaRep.deleteById(id);
+        Optional<Marca> marcaOptional = marcaRep.findById(id);
+        if (marcaOptional.isPresent()){
+            Marca marca = marcaOptional.get();
+            if (!marca.isAtivo()){
+                marcaRep.deleteById(id);
+            } else {
+                marca.setAtivo(false);
+                marcaRep.save(marca);
+            }
+        }
     }
-
-
 
 
 }
