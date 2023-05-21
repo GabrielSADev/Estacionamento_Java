@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {
@@ -78,8 +80,17 @@ public class ModeloController {
 
     @DeleteMapping("delete/{id}")
     public void deletaModelo(@PathVariable Long id){
-        modeloRep.deleteById(id);
+        Optional<Modelo> modeloOptional = modeloRep.findById(id);
+        if (modeloOptional.isPresent()) {
+            Modelo modelo = modeloOptional.get();
+            if (!modelo.isAtivo()) {
+                modeloRep.deleteById(id);
+            } else {
+                modelo.setAtivo(false);
+                modeloRep.save(modelo);
+            }
+        }
     }
 
-
+    
 }
