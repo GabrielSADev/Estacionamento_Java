@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping(value = "/api/movimentacao")
 public class MovimentacaoController {
@@ -72,8 +74,15 @@ public class MovimentacaoController {
 
     @DeleteMapping("delete/{id}")
     public void deletaMovimentacao(@PathVariable Long id){
-        movimentacaoRep.deleteById(id);
-    }
 
+        Optional<Movimentacao> movimentacaoOptional = movimentacaoRep.findById(id);
+        if (movimentacaoOptional.isPresent()){
+            Movimentacao movimentacao = movimentacaoOptional.get();
+            if (movimentacao.isAtivo()){
+                movimentacao.setAtivo(false);
+            }
+        }
+    }
+    
 
 }
