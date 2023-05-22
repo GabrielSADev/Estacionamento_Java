@@ -7,4 +7,6 @@ public interface CondutorRep extends JpaRepository <Condutor,Long> {
 
 
     Condutor findByCpf(String cpf);
+
+    Condutor findByAtivo(boolean ativo);
 }
