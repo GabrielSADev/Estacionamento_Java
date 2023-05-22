@@ -15,6 +15,7 @@ public class Modelo extends AbstractEntity{
     private String nome;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "marca")
     private Marca marca;
 
 }
