@@ -34,11 +34,11 @@ public class MovimentacaoController {
     }
 
     @GetMapping("/abertos/{aberto}")
-    public ResponseEntity <?> aberto(@PathVariable("aberto") boolean aberto){
-        if(!aberto){
-            return ResponseEntity.noContent().build();
+    public ResponseEntity <?> aberto(@PathVariable("aberto") boolean ativo){
+        if(!ativo){
+            return ResponseEntity.ok(movimentacaoRep.findByAtivo(false));
         }
-        return ResponseEntity.ok(new Movimentacao());
+        return ResponseEntity.ok(movimentacaoRep.findByAtivo(true));
     }
 
     @PostMapping

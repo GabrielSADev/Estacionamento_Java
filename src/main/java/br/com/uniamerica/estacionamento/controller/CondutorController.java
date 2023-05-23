@@ -86,6 +86,9 @@ public class CondutorController {
                 condutorRep.save(condutor);
             }
         }
+        else {
+            throw new RuntimeException("Nao foi possivel indentificar o Id informado");
+        }
     }
 
 

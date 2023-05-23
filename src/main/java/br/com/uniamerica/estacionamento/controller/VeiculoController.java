@@ -37,9 +37,9 @@ public class VeiculoController {
     @GetMapping("/ativos/{ativo}")
     public ResponseEntity <?> ativo(@PathVariable("ativo") boolean ativo){
         if(!ativo){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(veiculoRep.findByAtivo(false));
         }
-        return ResponseEntity.ok(new Veiculo());
+        return ResponseEntity.ok(veiculoRep.findByAtivo(true));
     }
 
     @PostMapping

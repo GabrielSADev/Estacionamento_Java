@@ -28,10 +28,6 @@ public class ModeloController {
         return ResponseEntity.ok(modelo);
     }
 
-    // http://localhost:8080/api/modelo/1
-
-    // http://localhost:8080/api/modelo?id=1
-
 
     @GetMapping("/lista")
     public ResponseEntity <?> ListaCompleta(){
@@ -39,11 +35,11 @@ public class ModeloController {
     }
 
     @GetMapping("/ativos/{ativo}")
-    public ResponseEntity <?> ativo(@PathVariable("ativo") boolean ativo){
-    if(!ativo){
-        return ResponseEntity.noContent().build();
-    }
-        return ResponseEntity.ok(new Modelo());
+    public ResponseEntity <?> ativoModelo(@PathVariable("ativo") boolean ativo){
+        if(!ativo){
+            return ResponseEntity.ok(modeloRep.findByAtivo(false));
+        }
+        return ResponseEntity.ok(modeloRep.findByAtivo(true));
     }
 
 
