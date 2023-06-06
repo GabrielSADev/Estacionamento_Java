@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConfiguracaoRep extends JpaRepository <Configuracao,Long> {
 
+    Configuracao findByvalorHora(float valorHora);
 
 }

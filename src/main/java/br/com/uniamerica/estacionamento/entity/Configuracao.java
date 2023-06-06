@@ -14,7 +14,7 @@ public class Configuracao extends AbstractEntity{
 
     @Getter @Setter
     @Column(name = "valor hora")
-    private BigDecimal valorHora;
+    private float valorHora;
     @Getter @Setter
     @Column(name = "valor minuto multa")
     private BigDecimal valorMinutoMulta;
@@ -41,6 +41,6 @@ public class Configuracao extends AbstractEntity{
     private int vagasCarro;
     @Getter @Setter
     @Column(name = "Vagas de Van")
-    private int vagasVam;
+    private int vagasVan;
 
 }

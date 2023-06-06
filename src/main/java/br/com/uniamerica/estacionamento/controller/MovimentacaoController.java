@@ -60,13 +60,13 @@ public class MovimentacaoController {
     @PutMapping
     public ResponseEntity<?> editarMovimentacao(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try {
-            movimentacaoService.atualizarMovimentacao(movimentacao);
             final Movimentacao movimentacao1 = this.movimentacaoRep.findById(id).orElse(null);
 
             if (movimentacao1 == null || !movimentacao1.getId().equals(movimentacao.getId())){
                 throw new RuntimeException("Nao foi possivel indentificar o registro informado");
             }
-            return ResponseEntity.ok("Registro Cadastrado com Sucesso");
+            return this.movimentacaoService.atualizarMovimentacao(movimentacao,id);
+
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError()
