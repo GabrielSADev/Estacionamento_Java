@@ -3,8 +3,6 @@ package br.com.uniamerica.estacionamento.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.Instant;
-import java.util.List;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.math.BigDecimal;

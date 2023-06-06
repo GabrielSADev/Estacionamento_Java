@@ -28,10 +28,15 @@ public class CondutorService {
         Assert.isTrue(condutorExistente == null || condutorExistente.equals
                 (condutor.getCpf()), "Cpf já existente");
 
-        /* (this.validaCPF.isCPF(condutor.getCpf()) == false) {
-                throw new RuntimeException("Cpf inválido!");
-        }  */
-        //mesma coisa do assert acima
+        if (this.validaCPF.isCPF(condutor.getCpf()) == true) {
+            System.out.printf("%s\n", this.validaCPF.imprimeCPF(condutor.getCpf()));
+        }
+        else {
+            int x = 2;
+            System.out.printf("Erro, CPF invalido !!!\n");
+            Assert.isTrue(x == 1, "Cpf inválido");
+
+        }
 
         Assert.isTrue(condutor.getTelefone().substring(0,11).matches("[0-9]*"),"Telefone deve conter apenas números!");
         Assert.isTrue(!condutor.getTelefone().equals(""), "Telefone não pode ser nulo!");
@@ -45,6 +50,13 @@ public class CondutorService {
 
     public void atualizaCondutor (Condutor condutor){
         final Condutor condutorAttService=this.condutorRep.findById(condutor.getId()).orElse(null);
+
+        Assert.isTrue(!condutor.getNome().equals(""),"Nome não pode ser nulo!");
+        Assert.isTrue(condutor.getNome().length() <= 50,"Máximo de 50 caracteres");
+
+        Assert.isTrue(!condutor.getCpf().equals(""),"Cpf não pode ser nulo");
+        Assert.isTrue(condutor.getCpf().length() == 11, "Cpf deve conter 11 digitos");
+
         condutor.setCadastro(condutorAttService.getCadastro());
 
         this.condutorRep.save(condutor);

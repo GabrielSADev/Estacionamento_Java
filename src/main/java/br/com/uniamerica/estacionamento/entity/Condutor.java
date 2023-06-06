@@ -1,12 +1,10 @@
 package br.com.uniamerica.estacionamento.entity;
 
-import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import java.sql.Time;
 import java.time.LocalTime;
 
 @Entity
@@ -23,10 +21,10 @@ public class Condutor extends AbstractEntity{
     @Column(name = "telefone",nullable = false,length = 17, unique = true)
     private String telefone;
     @Getter @Setter
-    @Column(name = "tempo_pago", columnDefinition = "TIME")
+    @Column(name = "tempo_pago")
     private LocalTime tempoPago;
     @Getter @Setter
-    @Column(name = "tempo_desconto", columnDefinition = "TIME")
+    @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
 
 

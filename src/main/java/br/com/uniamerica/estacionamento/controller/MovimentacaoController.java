@@ -1,7 +1,9 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.repository.MovimentacaoRep;
+import br.com.uniamerica.estacionamento.service.ConfiguracaoService;
 import br.com.uniamerica.estacionamento.service.MovimentacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +22,9 @@ public class MovimentacaoController {
 
     @Autowired
     private MovimentacaoService movimentacaoService;
+
+    @Autowired
+    private ConfiguracaoService configuracaoService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
@@ -48,7 +53,7 @@ public class MovimentacaoController {
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -58,7 +63,7 @@ public class MovimentacaoController {
             movimentacaoService.atualizarMovimentacao(movimentacao);
             final Movimentacao movimentacao1 = this.movimentacaoRep.findById(id).orElse(null);
 
-            if (movimentacao1 == null || !movimentacao1.getId().equals(movimentacao1.getId())){
+            if (movimentacao1 == null || !movimentacao1.getId().equals(movimentacao.getId())){
                 throw new RuntimeException("Nao foi possivel indentificar o registro informado");
             }
             return ResponseEntity.ok("Registro Cadastrado com Sucesso");
