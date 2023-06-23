@@ -50,9 +50,9 @@ public class MovimentacaoController {
     public ResponseEntity <?> cadastrarMovimentacao(@RequestBody final Movimentacao movimentacao){
         try {
             movimentacaoService.verificarMovimentacao(movimentacao);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
+            return ResponseEntity.ok("Registro cadastrado com sucesso" + movimentacao.getEntrada());
         }
-        catch (DataIntegrityViolationException e){
+        catch (Exception e){
             return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }

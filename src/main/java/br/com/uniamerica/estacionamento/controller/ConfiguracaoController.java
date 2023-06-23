@@ -3,6 +3,7 @@ package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.repository.ConfiguracaoRep;
+import br.com.uniamerica.estacionamento.service.ConfiguracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class ConfiguracaoController {
     @Autowired
     private ConfiguracaoRep configuracaoRep;
 
+    @Autowired
+    private ConfiguracaoService configuracaoService;
+
     @GetMapping("/{id}")
     public ResponseEntity <?> findByIdPath(@PathVariable("id") final Long id){
         final Configuracao configuracao = this.configuracaoRep.findById(id).orElse(null);
@@ -27,6 +31,7 @@ public class ConfiguracaoController {
     public ResponseEntity <?> cadastConfig(@RequestBody final Configuracao configuracao){
         try {
             this.configuracaoRep.save(configuracao);
+            this.configuracaoService.valorHoraFunc(configuracao);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
         catch (DataIntegrityViolationException e){

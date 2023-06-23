@@ -1,6 +1,5 @@
 package br.com.uniamerica.estacionamento.controller;
 
-
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.ModeloRep;
 import br.com.uniamerica.estacionamento.service.ModeloService;

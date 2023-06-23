@@ -32,9 +32,10 @@ public class MovimentacaoService {
     @Autowired
     CondutorRep condutorRep;
 
+    Configuracao configuracao;
 
     @Transactional(rollbackFor = Exception.class)
-    public void verificarMovimentacao(final Movimentacao movimentacao){
+    public void verificarMovimentacao(Movimentacao movimentacao){
 
         Assert.isTrue(!movimentacao.getVeiculo().equals(""),"O veiculo nao pode ser nulo!");
         Movimentacao veiculoExistente = movimentacaoRep.findByVeiculo(movimentacao.getVeiculo());
@@ -52,17 +53,11 @@ public class MovimentacaoService {
     public ResponseEntity<?> atualizarMovimentacao (Movimentacao movimentacao, Long id){
         final Movimentacao movimentacao1 = this.movimentacaoRep.findById(id).orElse(null);
 
-        final Movimentacao moviAttService=this.movimentacaoRep.findById(movimentacao.getId()).orElse(null);
-        movimentacao.setCadastro(moviAttService.getCadastro());
-
         Assert.isTrue(movimentacao.getVeiculo() != null,"Veiculo não pode ser nulo");
 
         Assert.isTrue(movimentacao.getCondutor() != null,  "Condutor não pode ser nulo");
 
         Duration valorEntre = Duration.between(movimentacao.getEntrada(), movimentacao.getSaida());
-
-        String formattedElapsedTime = String.format("%02d%02d%02d", valorEntre.toHoursPart(), valorEntre.toMinutesPart(),
-                valorEntre.toSecondsPart());
 
         String stringHoras = String.format("%02d" , valorEntre.toHoursPart());
         String stringMinutos = String.format("%02d" , valorEntre.toMinutesPart());
@@ -79,12 +74,12 @@ public class MovimentacaoService {
         float pegadorHoras = configuracaoService.PegaHoras;
 
         System.out.println(pegadorHoras);
-        Assert.isTrue(pegadorHoras == 0.0, "Adiciona um valor para valorHora");
+        Assert.isTrue(pegadorHoras != 0.0, "Adiciona um valor para valorHora");
 
         float taDevendo = (secondsToHours + minutosToHours + paraHorasH) * pegadorHoras;
 
         System.out.println(taDevendo);
-
+        movimentacao.setAtivo(false);
 
         this.movimentacaoRep.save(movimentacao);
 

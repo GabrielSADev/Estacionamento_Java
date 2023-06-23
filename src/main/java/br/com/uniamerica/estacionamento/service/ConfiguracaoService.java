@@ -16,7 +16,6 @@ public class ConfiguracaoService {
 
     static float PegaHoras;
 
-    @Transactional(rollbackFor = Exception.class)
     public void valorHoraFunc(Configuracao configuracao){
 
 

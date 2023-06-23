@@ -18,6 +18,7 @@ public class Veiculo extends AbstractEntity {
     private int ano;
     @Getter @Setter
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modelo",nullable = false)
     private Modelo modelo;
 
     @Enumerated(EnumType.STRING)
@@ -26,6 +27,6 @@ public class Veiculo extends AbstractEntity {
     private Cor cor;
     @Enumerated(EnumType.STRING)
     @Getter @Setter
-    @Column(name = "tipo", length = 6)
+    @Column(name = "tipo", length = 6, nullable = false)
     private Tipo tipo;
 }
