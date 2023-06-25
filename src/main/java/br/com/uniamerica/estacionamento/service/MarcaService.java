@@ -36,4 +36,16 @@ public class MarcaService {
         this.marcaRep.save(marca);
 
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void excluir(final Long id) {
+
+        final Marca marcaBanco = this.marcaRep.findById(id).orElse(null);
+
+        if (marcaBanco == null || !marcaBanco.getId().equals(id)){
+            throw new RuntimeException("Não foi possivel identificar o registro informado.");
+        }
+
+        this.marcaRep.delete(marcaBanco);
+    }
 }

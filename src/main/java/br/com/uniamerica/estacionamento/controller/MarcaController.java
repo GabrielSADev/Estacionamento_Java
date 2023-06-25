@@ -50,8 +50,8 @@ public class MarcaController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editarMarca(@RequestParam("id") final Long id, @RequestBody final Marca marca){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarMarca(@PathVariable("id") final Long id, @RequestBody final Marca marca){
         try {
             marcaService.atualizarMarca(marca);
             final Marca marca1 = this.marcaRep.findById(id).orElse(null);
@@ -70,18 +70,26 @@ public class MarcaController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deletaMarca(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletaMarca(@PathVariable("id") final Long id){
         Optional<Marca> marcaOptional = marcaRep.findById(id);
+        try {
         if (marcaOptional.isPresent()){
             Marca marca = marcaOptional.get();
             if (!marca.isAtivo()){
-                marcaRep.deleteById(id);
+                this.marcaService.excluir(id);
+                return ResponseEntity.ok("Registro excluido com sucesso.");
             } else {
                 marca.setAtivo(false);
                 marcaRep.save(marca);
+                return  ResponseEntity.ok("Desativado");
+             }
             }
         }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.internalServerError().body("Algo deu errado");
     }
 
 
