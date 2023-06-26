@@ -53,8 +53,8 @@ public class VeiculoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editarVeiculo(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculo){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarVeiculo(@PathVariable("id") final Long id, @RequestBody final Veiculo veiculo){
         try {
             veiculoService.atualizarVeiculo(veiculo);
             final Veiculo veiculo1 = this.veiculoRep.findById(id).orElse(null);
@@ -73,19 +73,28 @@ public class VeiculoController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deletaVeiculo(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletaVeiculo(@PathVariable("id") final Long id){
         Optional<Veiculo> veiculoOptional = veiculoRep.findById(id);
-        if (veiculoOptional.isPresent()) {
-            Veiculo veiculo = veiculoOptional.get();
-            if (!veiculo.isAtivo()) {
-                veiculoRep.deleteById(id);
-            } else {
-                veiculo.setAtivo(false);
-                veiculoRep.save(veiculo);
+        try {
+            if (veiculoOptional.isPresent()){
+                Veiculo veiculo = veiculoOptional.get();
+                if (!veiculo.isAtivo()){
+                    this.veiculoService.excluir(id);
+                    return ResponseEntity.ok("Registro excluido com sucesso.");
+                } else {
+                    veiculo.setAtivo(false);
+                    veiculoRep.save(veiculo);
+                    return  ResponseEntity.ok("Desativado");
+                }
             }
         }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.internalServerError().body("Algo deu errado");
     }
+
 
 
 }
