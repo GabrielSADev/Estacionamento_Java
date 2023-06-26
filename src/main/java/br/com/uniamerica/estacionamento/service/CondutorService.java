@@ -1,6 +1,7 @@
 package br.com.uniamerica.estacionamento.service;
 import br.com.uniamerica.estacionamento.configs.ValidaCPF;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.CondutorRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,18 @@ public class CondutorService {
 
         this.condutorRep.save(condutor);
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void excluir(final Long id) {
+
+        final Condutor condutorBanco = this.condutorRep.findById(id).orElse(null);
+
+        if (condutorBanco == null || !condutorBanco.getId().equals(id)){
+            throw new RuntimeException("Não foi possivel identificar o modelo informado.");
+        }
+
+        this.condutorRep.delete(condutorBanco);
     }
 
 }

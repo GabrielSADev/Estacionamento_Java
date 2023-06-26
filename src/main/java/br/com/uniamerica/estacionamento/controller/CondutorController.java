@@ -1,6 +1,7 @@
 package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.CondutorRep;
 import br.com.uniamerica.estacionamento.service.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,8 @@ public class CondutorController {
 
     }
 
-    @PutMapping
-    public ResponseEntity<?> editarCondutor(@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarCondutor(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try {
             condutorService.atualizaCondutor(condutor);
             final Condutor condutor1 = this.condutorRep.findById(id).orElse(null);
@@ -74,23 +75,26 @@ public class CondutorController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deletaCondutor(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletaModelo(@PathVariable("id") final Long id){
         Optional<Condutor> condutorOptional = condutorRep.findById(id);
-        if (condutorOptional.isPresent()) {
-            Condutor condutor = condutorOptional.get();
-            if (!condutor.isAtivo()) { // Se ativo for false, deleta o condutor
-                condutorRep.deleteById(id);
-            } else { // Se ativo for true, atualiza para false e depois deleta o condutor
-                condutor.setAtivo(false);
-                condutorRep.save(condutor);
+        try {
+            if (condutorOptional.isPresent()){
+                Condutor condutor = condutorOptional.get();
+                if (!condutor.isAtivo()){
+                    this.condutorService.excluir(id);
+                    return ResponseEntity.ok("Registro excluido com sucesso.");
+                } else {
+                    condutor.setAtivo(false);
+                    condutorRep.save(condutor);
+                    return  ResponseEntity.ok("Desativado");
+                }
             }
         }
-        else {
-            throw new RuntimeException("Nao foi possivel indentificar o Id informado");
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
+        return ResponseEntity.internalServerError().body("Algo deu errado");
     }
-
-
 
 }
