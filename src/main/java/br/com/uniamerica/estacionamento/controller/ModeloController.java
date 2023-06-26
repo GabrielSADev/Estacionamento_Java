@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 
+import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.ModeloRep;
 import br.com.uniamerica.estacionamento.service.ModeloService;
@@ -53,8 +54,8 @@ public class ModeloController {
        }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Modelo modelo){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Modelo modelo){
         try {
             modeloService.atualizarModelo(modelo);
             final Modelo modelo1 = this.modeloRep.findById(id).orElse(null);
@@ -73,18 +74,26 @@ public class ModeloController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deletaModelo(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletaModelo(@PathVariable("id") final Long id){
         Optional<Modelo> modeloOptional = modeloRep.findById(id);
-        if (modeloOptional.isPresent()) {
-            Modelo modelo = modeloOptional.get();
-            if (!modelo.isAtivo()) {
-                modeloRep.deleteById(id);
-            } else {
-                modelo.setAtivo(false);
-                modeloRep.save(modelo);
+        try {
+            if (modeloOptional.isPresent()){
+                Modelo modelo = modeloOptional.get();
+                if (!modelo.isAtivo()){
+                    this.modeloService.excluir(id);
+                    return ResponseEntity.ok("Registro excluido com sucesso.");
+                } else {
+                    modelo.setAtivo(false);
+                    modeloRep.save(modelo);
+                    return  ResponseEntity.ok("Desativado");
+                }
             }
         }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.internalServerError().body("Algo deu errado");
     }
 
 

@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.service;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.repository.ModeloRep;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,18 @@ public class ModeloService {
 
         this.modeloRep.save(modelo);
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void excluir(final Long id) {
+
+        final Modelo modeloBanco = this.modeloRep.findById(id).orElse(null);
+
+        if (modeloBanco == null || !modeloBanco.getId().equals(id)){
+            throw new RuntimeException("Não foi possivel identificar o modelo informado.");
+        }
+
+        this.modeloRep.delete(modeloBanco);
     }
 
 }

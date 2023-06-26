@@ -12,7 +12,7 @@ public class Modelo extends AbstractEntity{
     @Column(name = "nome", length = 45)
     private String nome;
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "modelo_marca",
             uniqueConstraints = @UniqueConstraint(
                     columnNames = {
