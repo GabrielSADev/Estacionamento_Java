@@ -37,9 +37,8 @@ public class MovimentacaoService {
     @Transactional(rollbackFor = Exception.class)
     public void verificarMovimentacao(Movimentacao movimentacao){
 
+        movimentacao.setEntrada(LocalDateTime.now());
         Assert.isTrue(!movimentacao.getVeiculo().equals(""),"O veiculo nao pode ser nulo!");
-        Movimentacao veiculoExistente = movimentacaoRep.findByVeiculo(movimentacao.getVeiculo());
-        Assert.isTrue(veiculoExistente == null || veiculoExistente.equals(movimentacao),"Veiculo já existente");
 
         Assert.isTrue(!movimentacao.getCondutor().equals(""),"O condutor nao pode ser nulo!");
 
@@ -51,6 +50,9 @@ public class MovimentacaoService {
     }
 
     public ResponseEntity<?> atualizarMovimentacao (Movimentacao movimentacao, Long id){
+
+        movimentacao.setSaida(LocalDateTime.now());
+
         final Movimentacao movimentacao1 = this.movimentacaoRep.findById(id).orElse(null);
 
         Assert.isTrue(movimentacao.getVeiculo() != null,"Veiculo não pode ser nulo");

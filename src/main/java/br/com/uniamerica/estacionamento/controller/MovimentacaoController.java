@@ -57,15 +57,15 @@ public class MovimentacaoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editarMovimentacao(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarMovimentacao(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try {
             final Movimentacao movimentacao1 = this.movimentacaoRep.findById(id).orElse(null);
 
             if (movimentacao1 == null || !movimentacao1.getId().equals(movimentacao.getId())){
                 throw new RuntimeException("Nao foi possivel indentificar o registro informado");
             }
-            return this.movimentacaoService.atualizarMovimentacao(movimentacao,id);
+            return movimentacaoService.atualizarMovimentacao(movimentacao,id);
 
         }
         catch (DataIntegrityViolationException e){
@@ -77,7 +77,7 @@ public class MovimentacaoController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/{id}")
     public void deletaMovimentacao(@PathVariable Long id){
 
         Optional<Movimentacao> movimentacaoOptional = movimentacaoRep.findById(id);

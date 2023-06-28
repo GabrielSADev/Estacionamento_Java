@@ -8,4 +8,6 @@ import java.util.List;
 public interface ModeloRep extends JpaRepository <Modelo,Long> {
 
     List<Modelo> findByAtivo(boolean ativo);
+
+    Modelo findByNome(String nome);
 }

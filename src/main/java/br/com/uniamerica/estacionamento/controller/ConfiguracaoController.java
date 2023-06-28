@@ -26,6 +26,11 @@ public class ConfiguracaoController {
         return ResponseEntity.ok(configuracao);
     }
 
+    @GetMapping("/lista")
+    public ResponseEntity <?> ListaCompleta(){
+        return ResponseEntity.ok(this.configuracaoRep.findAll());
+    }
+
 
     @PostMapping
     public ResponseEntity <?> cadastConfig(@RequestBody final Configuracao configuracao){
@@ -39,12 +44,12 @@ public class ConfiguracaoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editarConfig(@RequestParam("id") final Long id, @RequestBody final Configuracao configuracao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarConfig(@PathVariable("id") final Long id, @RequestBody final Configuracao configuracao){
         try {
             final Configuracao configuracao1 = this.configuracaoRep.findById(id).orElse(null);
 
-            if (configuracao1 == null || configuracao1.getId().equals(configuracao.getId())){
+            if (configuracao1 == null || !configuracao1.getId().equals(configuracao.getId())){
                 throw new RuntimeException("Nao foi possivel indentificar o registro informado");
             }
             this.configuracaoRep.save(configuracao);

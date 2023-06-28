@@ -11,15 +11,15 @@ import java.math.BigDecimal;
 @Table(name = "Movimentações", schema = "public")
 public class Movimentacao extends AbstractEntity{
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "veiculo",nullable = false,unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "veiculo",nullable = false)
     private Veiculo veiculo;
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "condutor",nullable = false)
     private Condutor condutor;
     @Getter @Setter
-    @Column(name = "Entrada",nullable = false)
+    @Column(name = "Entrada")
     private LocalDateTime entrada;
     @Getter @Setter
     @Column(name = "Saida")

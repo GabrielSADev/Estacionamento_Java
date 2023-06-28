@@ -43,7 +43,7 @@ public class MarcaController {
     public ResponseEntity <?> cadastrarMarca(@RequestBody final Marca marca){
         try {
             marcaService.cadastrarMarca(marca);
-            return ResponseEntity.ok("Registro cadastrado com sucesso" + marca.getNome() + marca.getCadastro());
+            return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
         catch (Exception e){
             return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
